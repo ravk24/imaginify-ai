@@ -8,6 +8,7 @@ import Image from "../database/models/image.model";
 import { redirect } from "next/navigation";
 
 import { v2 as cloudinary } from 'cloudinary'
+import { log } from "console";
 
 const populateUser = (query: any) => query.populate({
   path: 'author',
@@ -99,15 +100,18 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
   searchQuery?: string;
 }) {
   try {
+    console.log("database start");
+    
     await connectToDatabase();
-
+console.log("database ok ");
+console.log("clodinary start");
     cloudinary.config({
       cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
       api_secret: process.env.CLOUDINARY_API_SECRET,
       secure: true,
-    })
-
+    }) 
+console.log("clodinary ok");
     let expression = 'folder=imaginify-ai';
 
     if (searchQuery) {
