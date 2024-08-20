@@ -9,10 +9,12 @@ import { handleError } from "../utils";
 // CREATE
 export async function createUser(user: CreateUserParams) {
   try {
+    console.log("1a");
+
     await connectToDatabase();
 
     const newUser = await User.create(user);
-
+    console.log("2a");
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
     handleError(error);
@@ -22,12 +24,14 @@ export async function createUser(user: CreateUserParams) {
 // READ
 export async function getUserById(userId: string) {
   try {
+    console.log("1");
+
     await connectToDatabase();
-
+    console.log("2");
     const user = await User.findOne({ clerkId: userId });
-
+    console.log("3");
     if (!user) throw new Error("User not found");
-
+    console.log("4");
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     handleError(error);
@@ -44,7 +48,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
     });
 
     if (!updatedUser) throw new Error("User update failed");
-    
+
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
     handleError(error);
@@ -80,11 +84,11 @@ export async function updateCredits(userId: string, creditFee: number) {
 
     const updatedUserCredits = await User.findOneAndUpdate(
       { _id: userId },
-      { $inc: { creditBalance: creditFee }},
+      { $inc: { creditBalance: creditFee } },
       { new: true }
-    )
+    );
 
-    if(!updatedUserCredits) throw new Error("User credits update failed");
+    if (!updatedUserCredits) throw new Error("User credits update failed");
 
     return JSON.parse(JSON.stringify(updatedUserCredits));
   } catch (error) {
